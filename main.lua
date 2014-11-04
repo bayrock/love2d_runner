@@ -23,6 +23,9 @@ function love.focus(bool)
 end
 
 function love.keypressed( key, unicode )
+	if player.dead then
+		game:reload()
+	end
 end
 
 function love.keyreleased( key, unicode )
@@ -37,9 +40,11 @@ end
 
 function love.mousepressed( x, y, button )
 	if button == "l" then
-		entity:new()
+--		entity:new()
+		frequency = frequency + 1
 	elseif button == "r" then
-		entity:killAll()
+--		entity:killAll()
+		frequency = frequency - 1
 	end
 end
 

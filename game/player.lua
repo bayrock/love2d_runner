@@ -6,14 +6,14 @@ Author: Bayrock (http://Devinity.org)
 player = {
 	x = 200,
 	y = 380,
-	speed = 500
+	speed = 500,
+	dead = false
 }
 
 function player:draw()
 	local function triangleCenter(x1,y1,x2,y2,x3,y3)
    		return (x1+x2+x3)/3,(y1+y2+y3)/3 -- averaged point coordinates
 	end
-
 	local x1,y1,x2,y2,x3,y3 = 0,0,100,0,50,100 -- triangle coords
 	local cx,cy = triangleCenter(x1,y1,x2,y2,x3,y3) -- center of triangle
 

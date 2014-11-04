@@ -6,9 +6,11 @@ Author: Bayrock (http://Devinity.org)
 game = {}
 
 projectName = "Lua Runner "
-version = "v0.1"
+version = "v0.3"
 
 debug = true
+
+frequency = 1 -- block frequency
 
 windowWidth = 700
 windowHeight = 400
