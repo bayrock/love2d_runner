@@ -10,16 +10,16 @@ function entity:new()
 	table.insert(entity, {x = math.random(20, love.window.getWidth() - 20), y = -10})
 end
 
-function entity:killAll()
-	for k, v in ipairs(entity) do
-		table.remove(entity, k)
+function entity:kill()
+local diff = #entity - frequency
+	for i= #entity, diff, -1 do
+		table.remove(entity, i)
 	end
 end
 
-function entity:kill()
-local diff = #entity - frequency
-	for i=#entity, diff, -1 do
-		table.remove(entity, i)
+function entity:killAll()
+	for k, v in ipairs(entity) do
+		table.remove(entity, k)
 	end
 end
 
@@ -41,6 +41,10 @@ function entity:update(dt)
 			player.dead = true
 			frequency = 0
 		end
+	end
+	if player.score > nextIncrement then
+		frequency = frequency + 1
+		nextIncrement = nextIncrement + 10
 	end
 	if #entity < frequency then
 		entity:new()

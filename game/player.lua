@@ -7,6 +7,7 @@ player = {
 	x = 200,
 	y = 380,
 	speed = 500,
+	score = 0,
 	dead = false
 }
 

@@ -6,11 +6,18 @@ Author: Bayrock (http://Devinity.org)
 require("game.player")
 require("game.entity")
 
+local function round(num, idp) -- Function to round to the nearest whole number or decimal
+	local mult = 10^(idp or 0)
+	return math.floor(num * mult + 0.5) / mult
+end
+
 function game:reload()
-	frequency = 1
+	frequency = 4
+	nextIncrement = 10
 	player.x = 200
 	player.y = 380
 	player.speed = 500
+	player.score = 0
 	player.dead = false
 end
 
@@ -23,6 +30,7 @@ function game:draw()
 		lg.print("FPS: "..love.timer.getFPS( ), 5, 20)
 		lg.print("Player X: "..math.floor(player.x), 5, 35)
 		lg.print("Entities: "..#entity, 5, 50)
+		lg.print("Score: "..round(player.score, 1), 5, 65)
 		lg.setColor(0, 0, 0, 127)
 		lg.point(player.x, player.y) -- draw point at player.xy
 		lg.rectangle("line", player.x - 25, player.y - 33.3, 50, 50) -- draw hitbox outline
@@ -40,6 +48,7 @@ end
 function UPDATE_GAME(dt) -- Called by love.update constantly
 	player:move(dt)
 	entity:update(dt)
+	player.score = player.score + dt
 end
 
 function DRAW_GAME() -- Draws to the screen

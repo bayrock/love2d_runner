@@ -41,10 +41,10 @@ end
 function love.mousepressed( x, y, button )
 	if button == "l" then
 --		entity:new()
-		frequency = frequency + 1
+		frequency = frequency + 2
 	elseif button == "r" then
 --		entity:killAll()
-		frequency = frequency - 1
+		frequency = frequency - 2
 	end
 end
 
