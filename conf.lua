@@ -6,7 +6,7 @@ Author: Bayrock (http://Devinity.org)
 game = {}
 
 projectName = "Lua Runner "
-version = "v0.3"
+version = "v0.4"
 
 debug = true
 
@@ -50,4 +50,3 @@ function love.conf(t)
     t.modules.window = true
     t.modules.thread = true
 end
-

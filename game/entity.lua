@@ -3,41 +3,52 @@ entity.lua
 Author: Bayrock (http://Devinity.org)
 ]]
 
-entity = {}
+local ENTS = {}
+
+local entitymeta = {}
+entitymeta.__index = entitymeta
 math.random = love.math.random
 
-function entity:new()
-	table.insert(entity, {x = math.random(20, love.window.getWidth() - 20), y = -10})
+function NewEntity(pos)
+	local new = {}
+	new.pos = pos
+	setmetatable(new, entitymeta)
+	
+	table.insert(ENTS, new)
+	
+	return new
 end
 
-function entity:kill()
-local diff = #entity - frequency
-	for i= #entity, diff, -1 do
-		table.remove(entity, i)
-	end
-end
-
-function entity:killAll()
-	for k, v in ipairs(entity) do
-		table.remove(entity, k)
-	end
-end
-
-function entity:draw()
-	for k, v in ipairs(entity) do
-		love.graphics.setColor(153, 204, 255)
-		love.graphics.rectangle("fill", v.x, v.y, 50, 50)
-	end
-end
-
-function entity:update(dt)
-	for k, v in ipairs(entity) do
-		v.y = v.y + 180 * dt
-		if v.y >= love.window.getHeight() + 10 then
-			v.y = -10
-			v.x = math.random(20, love.window.getWidth() - 20)
+function entitymeta:Kill()
+	for k,v in pairs(ENTS) do
+		if v == self then
+			table.remove(ENTS, k)
+			break
 		end
-		if checkCollision(v.x, v.y, 50, 50, player.x - 25, player.y - 33.3, 50, 50) then
+	end
+end
+
+function entitymeta:GetPos()
+	return self.pos
+end
+
+function entitymeta:Draw()
+	for k, v in pairs(ENTS) do
+		local pos = v.pos
+		love.graphics.setColor(153, 204, 255)
+		love.graphics.rectangle("fill", pos.x, pos.y, 50, 50)
+	end
+end
+
+function entitymeta:Update(dt)
+	for k, v in pairs(ENTS) do
+		local pos = v.pos
+		pos.y = pos.y + 0.5/frequency
+		if pos.y >= love.window.getHeight() + 10 then
+			pos.y = -10
+			pos.x = math.random(20, love.window.getWidth() - 20)
+		end
+		if checkCollision(pos.x, pos.y, 50, 50, player.x - 25, player.y - 33.3, 50, 50) then
 			player.dead = true
 			frequency = 0
 		end
@@ -46,11 +57,18 @@ function entity:update(dt)
 		frequency = frequency + 1
 		nextIncrement = nextIncrement + 10
 	end
-	if #entity < frequency then
-		entity:new()
-	elseif #entity > frequency then
-		entity:kill()
-	end
+--[[	if #ENTS < frequency then -- why doesn't this work?
+		NewEntity(vector(math.random(20, love.window.getWidth() - 20), -10))
+	end]]
+end
+
+ent = {}
+function ent.GetAll()
+	return ENTS
+end
+
+function ent.Count()
+	return #ENTS or 0
 end
 
 function checkCollision(x1,y1,w1,h1, x2,y2,w2,h2)

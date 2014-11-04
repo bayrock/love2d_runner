@@ -11,7 +11,7 @@ player = {
 	dead = false
 }
 
-function player:draw()
+function player.draw()
 	local function triangleCenter(x1,y1,x2,y2,x3,y3)
    		return (x1+x2+x3)/3,(y1+y2+y3)/3 -- averaged point coordinates
 	end
@@ -30,7 +30,7 @@ function player:draw()
 end
 
 local keyDown = love.keyboard.isDown
-function player:move(dt)
+function player.move(dt)
 	local movementSpeed = player.speed * dt
 	if keyDown("right") then
 		if player.x < windowWidth - 25 then

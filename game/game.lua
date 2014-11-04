@@ -11,7 +11,8 @@ local function round(num, idp) -- Function to round to the nearest whole number 
 	return math.floor(num * mult + 0.5) / mult
 end
 
-function game:reload()
+function game.reload()
+	for k, v in pairs(ent.GetAll()) do v:Kill() end
 	frequency = 4
 	nextIncrement = 10
 	player.x = 200
@@ -23,13 +24,13 @@ end
 
 lg = love.graphics
 function game:draw()
-	player:draw() -- Draw player
+	player.draw() -- Draw player
 
 	if debug then -- Draw debug
 		lg.print(projectName..version, 5, 5)
 		lg.print("FPS: "..love.timer.getFPS( ), 5, 20)
 		lg.print("Player X: "..math.floor(player.x), 5, 35)
-		lg.print("Entities: "..#entity, 5, 50)
+		lg.print("Entities: "..ent.Count(), 5, 50)
 		lg.print("Score: "..round(player.score, 1), 5, 65)
 		lg.setColor(0, 0, 0, 127)
 		lg.point(player.x, player.y) -- draw point at player.xy
@@ -46,12 +47,12 @@ function game:draw()
 end
 
 function UPDATE_GAME(dt) -- Called by love.update constantly
-	player:move(dt)
-	entity:update(dt)
+	for k,v in pairs(ent.GetAll()) do v:Update() end
+	player.move(dt)
 	player.score = player.score + dt
 end
 
 function DRAW_GAME() -- Draws to the screen
-	entity:draw()
+	for k,v in pairs(ent.GetAll()) do v:Draw() end
 	game:draw()
 end

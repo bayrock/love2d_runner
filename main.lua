@@ -4,6 +4,7 @@ Author: Bayrock (http://Devinity.org)
 ]]
 
 require("game.game")
+vector = require("libs.vector")
 
 function love.load()
 	lg.setBackgroundColor(64, 64, 64)
@@ -40,11 +41,11 @@ end
 
 function love.mousepressed( x, y, button )
 	if button == "l" then
---		entity:new()
-		frequency = frequency + 2
+		NewEntity(vector(math.random(20, love.window.getWidth() - 20), -10)) -- for debugging
+		frequency = frequency + 1
 	elseif button == "r" then
---		entity:killAll()
-		frequency = frequency - 2
+		frequency = frequency - 1
+		for k, v in ipairs(ent.GetAll()) do v:Kill() end -- for debugging
 	end
 end
 
