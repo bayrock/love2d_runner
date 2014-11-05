@@ -12,7 +12,7 @@ version = "v0.5"
 debug = true
 
 frequency = 5 -- block frequency
-nextIncrement = 10
+nextIncrement = 15
 
 windowWidth = 700
 windowHeight = 400

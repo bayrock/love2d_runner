@@ -9,13 +9,8 @@ local entitymeta = {}
 entitymeta.__index = entitymeta
 math.random = love.math.random
 
-function entitymeta:Kill()
-	for k,v in pairs(ENTS) do
-		if v == self then
-			table.remove(ENTS, k)
-			break
-		end
-	end
+local function checkCollision(x1,y1,w1,h1, x2,y2,w2,h2)
+	return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
 end
 
 function entitymeta:Draw()
@@ -26,11 +21,11 @@ function entitymeta:Draw()
 	end
 end
 
-function entitymeta:Update()
-	local delta = dt
+local entSpeed = 35
+function entitymeta:Update(dt)
 	for k, v in pairs(ENTS) do
 		local pos = v.pos
-		pos.y = pos.y + 0.25/frequency
+		pos.y = pos.y + entSpeed * dt
 		if pos.y >= love.window.getHeight() + 10 then
 			pos.y = -10
 			pos.x = math.random(20, love.window.getWidth() - 20)
@@ -39,6 +34,22 @@ function entitymeta:Update()
 			player.dead = true
 			frequency = 0
 		end
+	end
+end
+
+function entitymeta:Kill()
+	for k,v in pairs(ENTS) do
+		if v == self then
+			table.remove(ENTS, k)
+			break
+		end
+	end
+end
+
+function ent.KillAll()
+	frequency = 0
+	for k,v in pairs(ENTS) do
+		ENTS = {}
 	end
 end
 
@@ -54,22 +65,19 @@ end
 
 function ent.Update()
 	if player.score > nextIncrement then
-		frequency = frequency + 1
-		nextIncrement = nextIncrement + 10
+		local incSum = 15
+		nextIncrement = nextIncrement + incSum
+		frequency = frequency + 0.4
+		entSpeed = entSpeed + 0.01
+		if incSum > 10 then
+			incSum = incSum - 0.5
+		end
+		print(entSpeed, nextIncrement, round(frequency))
 	end
-	if frequency > #ENTS then
-		local randX = math.random(20, love.window.getWidth() - 20)
-		local randY = math.random(-400, -10)
-		ent.New(vector(randX, randY))
-	elseif frequency < #ENTS then
+	if round(frequency) > #ENTS and #ENTS < 10 then
+		ent.New(vector(math.random(20, love.window.getWidth() - 20), math.random(-400, -10)))
+	elseif round(frequency) < #ENTS then
 		for k, v in pairs(ENTS) do v:Kill() end
-	end
-end
-
-function ent.KillAll()
-	frequency = 0
-	for k,v in pairs(ENTS) do
-		ENTS = {}
 	end
 end
 
@@ -79,8 +87,4 @@ end
 
 function ent.Count()
 	return #ENTS
-end
-
-function checkCollision(x1,y1,w1,h1, x2,y2,w2,h2)
-	return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
 end

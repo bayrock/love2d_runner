@@ -6,15 +6,14 @@ Author: Bayrock (http://Devinity.org)
 require("game.player")
 require("game.entity")
 
-local function round(num, idp) -- round to the nearest whole number or decimal
+function round(num, idp) -- round to the nearest whole number or decimal
 	local mult = 10^(idp or 0)
 	return math.floor(num * mult + 0.5) / mult
 end
 
-function game.Reload()
-	for k, v in pairs(ent.GetAll()) do v:Kill() end
+function game.Reload() -- reload game
 	frequency = 5
-	nextIncrement = 10
+	nextIncrement = 15
 	newHighscore = false
 	player.x = 200
 	player.y = 380
@@ -65,7 +64,7 @@ function game.LoadAudio()
 end
 
 function UPDATE_GAME(dt) -- called by love.update
-	for k,v in pairs(ent.GetAll()) do v:Update() end
+	for k,v in pairs(ent.GetAll()) do v:Update(dt) end
 	player.Update(dt)
 	ent.Update()
 end
