@@ -11,7 +11,7 @@ player = {
 	dead = false
 }
 
-function player.draw()
+function player.Draw()
 	local function triangleCenter(x1,y1,x2,y2,x3,y3)
    		return (x1+x2+x3)/3,(y1+y2+y3)/3 -- averaged point coordinates
 	end
@@ -20,7 +20,7 @@ function player.draw()
 
 	lg.setColor(153, 153, 255)
 
-	lg.push() -- Draw the player
+	lg.push() -- draw the player
 	lg.translate(player.x,player.y)
 	lg.scale(0.5,0.5)
 	lg.rotate(math.pi)
@@ -30,7 +30,7 @@ function player.draw()
 end
 
 local keyDown = love.keyboard.isDown
-function player.move(dt)
+function player.Update(dt)
 	local movementSpeed = player.speed * dt
 	if keyDown("right") then
 		if player.x < windowWidth - 25 then
@@ -40,5 +40,12 @@ function player.move(dt)
 		if player.x > 25 then 
 			player.x = player.x - movementSpeed
 		end
+	end
+	if player.dead then
+		gameloop:stop()
+		ent.KillAll()
+	else
+		gameloop:play()
+		player.score = player.score + dt
 	end
 end

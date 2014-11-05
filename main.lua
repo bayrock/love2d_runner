@@ -8,16 +8,16 @@ vector = require("libs.vector")
 
 function love.load()
 	lg.setBackgroundColor(64, 64, 64)
+	game.LoadAudio()
 	print("Loaded "..projectName..version)
 end
 
 function love.draw()
-	DRAW_GAME() -- Game drawing
+	DRAW_GAME() -- game drawing
 end
 
 function love.update(dt)
-	UPDATE_GAME(dt) -- Game updating
---	print()
+	UPDATE_GAME(dt) -- game updating
 end
 
 function love.focus(bool)
@@ -25,7 +25,7 @@ end
 
 function love.keypressed( key, unicode )
 	if player.dead then
-		game:reload()
+		game:Reload()
 	end
 end
 
@@ -41,11 +41,10 @@ end
 
 function love.mousepressed( x, y, button )
 	if button == "l" then
-		NewEntity(vector(math.random(20, love.window.getWidth() - 20), -10)) -- for debugging
 		frequency = frequency + 1
 	elseif button == "r" then
 		frequency = frequency - 1
-		for k, v in ipairs(ent.GetAll()) do v:Kill() end -- for debugging
+--		ent.KillAll()
 	end
 end
 
