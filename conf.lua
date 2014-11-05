@@ -4,6 +4,7 @@ Author: Bayrock (http://Devinity.org)
 ]]
 
 game = {}
+ent = {}
 
 projectName = "Lua Runner "
 version = "v0.5"

@@ -18,10 +18,6 @@ function entitymeta:Kill()
 	end
 end
 
-function entitymeta:GetPos()
-	return self.pos
-end
-
 function entitymeta:Draw()
 	for k, v in pairs(ENTS) do
 		local pos = v.pos
@@ -30,7 +26,8 @@ function entitymeta:Draw()
 	end
 end
 
-function entitymeta:Update(dt)
+function entitymeta:Update()
+	local delta = dt
 	for k, v in pairs(ENTS) do
 		local pos = v.pos
 		pos.y = pos.y + 0.25/frequency
@@ -45,7 +42,6 @@ function entitymeta:Update(dt)
 	end
 end
 
-ent = {}
 function ent.New(pos)
 	local new = {}
 	new.pos = pos
@@ -61,11 +57,11 @@ function ent.Update()
 		frequency = frequency + 1
 		nextIncrement = nextIncrement + 10
 	end
-	if frequency > ent.Count() then
+	if frequency > #ENTS then
 		local randX = math.random(20, love.window.getWidth() - 20)
 		local randY = math.random(-400, -10)
 		ent.New(vector(randX, randY))
-	elseif frequency < ent.Count() then
+	elseif frequency < #ENTS then
 		for k, v in pairs(ENTS) do v:Kill() end
 	end
 end

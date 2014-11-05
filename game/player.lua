@@ -8,6 +8,7 @@ player = {
 	y = 380,
 	speed = 500,
 	score = 0,
+	highscore = 0,
 	dead = false
 }
 
@@ -43,8 +44,14 @@ function player.Update(dt)
 	end
 	if player.dead then
 		gameloop:stop()
+		deadloop:play()
 		ent.KillAll()
+		if player.score > player.highscore then
+			newHighscore = true
+			player.highscore = player.score
+		end
 	else
+		deadloop:stop()
 		gameloop:play()
 		player.score = player.score + dt
 	end
