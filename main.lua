@@ -8,9 +8,8 @@ Gamestate = require ("libs.gamestate")
 vector = require("libs.vector")
 
 function love.load()
-	lg.setBackgroundColor(64, 64, 64)
 	Gamestate.registerEvents()
-	Gamestate.switch(game)
+	Gamestate.switch(menu)
 	print("Loaded "..projectName..version)
 end
 

@@ -10,17 +10,11 @@ windowWidth = love.graphics.getWidth()
 windowHeight = love.graphics.getHeight()
 lg = love.graphics
 
-game = {} -- main gamestate
-function game:init() -- load
-	local volume = love.audio.getVolume()
-	gameloop = love.audio.newSource("sound/gameloop.mp3")
-	gameloop:setLooping(true)
-	deadloop = love.audio.newSource("sound/deadloop.mp3")
-	deadloop:setLooping(true)
-	love.audio.setVolume(volume * 0.15)
-end
+game = {} -- main state constructor
 
-function game:enter() -- reload
+function game:enter()
+	lg.setBackgroundColor(64, 64, 64)
+	gameloop:play()
 	frequency = 5
 	nextIncrement = 15
 	newHighscore = false
@@ -30,16 +24,16 @@ function game:enter() -- reload
 	player.score = 0
 end
 
-function game:update(dt)
+function game:update(dt) -- update game
 	for k,v in pairs(entGetAll()) do v:Update(dt) end
 	player.Update(dt)
 	entUpdate()
 end
 
-function game:draw()
-	for k,v in pairs(entGetAll()) do v:Draw() end -- draw ents
-	player.Draw() -- draw player
-	if debug then -- draw debug overlay
+function game:draw() -- draw game
+	for k,v in pairs(entGetAll()) do v:Draw() end
+	player.Draw()
+	if debug then
 		lg.print(projectName..version, 5, 5)
 		lg.print("FPS: "..love.timer.getFPS( ), 5, 20)
 		lg.print("Player X: "..math.floor(player.x), 5, 35)
@@ -48,7 +42,7 @@ function game:draw()
 		lg.setColor(0,0,0, 127)
 		lg.point(player.x, player.y)
 		lg.rectangle("line", player.x - 25, player.y - 33.3, 50, 50)
-	else -- draw overlay
+	else
 		lg.print(projectName..version, 5, 5)
 		lg.print("Score: "..round(player.score, 1), 5, 20)
 	end
@@ -82,15 +76,45 @@ function game:focus(f)
 	end
 end
 
-dead = {} -- dead gamestate
+menu = {} -- menu state constructor
+function menu:init()
+	lg.setBackgroundColor(0, 51, 51)
+	local volume = love.audio.getVolume()
+	gameloop = love.audio.newSource("sound/gameloop.mp3")
+	gameloop:setLooping(true)
+	menuloop = love.audio.newSource("sound/menuloop.mp3")
+	menuloop:setLooping(true)
+	menuloop:play()
+	love.audio.setVolume(volume * 0.15)
+end
+
+function menu:draw()
+    local w,h = windowWidth, windowHeight
+    lg.setColor(255,255,255)
+    lg.printf("Press space to play", 0, h/2, w, "center")
+end
+
+function menu:keyreleased(key)
+	if key == " " then
+		menuloop:stop()
+    	Gamestate.switch(game)
+    end
+end
+
+dead = {} -- dead state constructor
+function dead:enter()
+	lg.setBackgroundColor(0, 51, 51)
+	gameloop:stop()
+	menuloop:play()
+end
+
 function dead:draw()
 	local w,h = windowWidth, windowHeight
-	lg.setColor(0,51,51)
-	lg.rectangle("fill", 0, 0, w, w)
 	lg.setColor(255,255,255)
 	lg.printf("Game over!", 0, h/2 - 65, w, "center")
 	lg.printf("You scored: "..round(player.score, 1), 0, h/2 - 35, w, "center")
-	lg.printf("Press any key to replay", 0, h/2 + 15, w, "center")
+	lg.printf("Space to replay", 0, h/2 + 15, w, "center")
+	lg.printf("backspace for menu", 0, h/2 + 30, w, "center")
 	if newHighscore then
 		lg.setColor(51, 255, 255)
 		lg.printf("New highscore!", 0, h/2 - 20, w, "center")
@@ -99,11 +123,16 @@ function dead:draw()
 	end
 end
 
-function dead:keypressed()
-	Gamestate.switch(game)
+function dead:keypressed(key)
+	if key == "backspace" then
+		Gamestate.switch(menu)
+	elseif key == " " then
+		menuloop:stop()
+		Gamestate.switch(game)
+	end
 end
 
-pause = {} -- pause gamestate
+pause = {} -- pause state constructor
 function pause:enter(from)
     self.from = from -- record previous state
     gameloop:pause()
@@ -121,4 +150,5 @@ end
 
 function pause:keypressed(key)
     Gamestate.pop() -- return previous state
+    gameloop:play()
 end

@@ -38,16 +38,12 @@ function player.Update(dt)
 		player.xVel = player.xVel - player.speed * dt
 	end
 	if Gamestate.current() == dead then
-		gameloop:stop()
-		deadloop:play()
 		entKillAll()
 		if player.score > player.highscore then
 			newHighscore = true
 			player.highscore = player.score
 		end
 	elseif Gamestate.current() == game then
-		deadloop:stop()
-		gameloop:play()
 		player.score = player.score + dt
 		player.x = player.x + player.xVel * dt
 	end
