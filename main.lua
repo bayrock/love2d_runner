@@ -37,6 +37,9 @@ function love.keyreleased( key, unicode )
 		debug = false
 	 	print("Debug overlay disabled")
 	end
+	if key == "left" or key == "right" then
+		player.xVel = 0
+	end
 end
 
 function love.mousepressed( x, y, button )

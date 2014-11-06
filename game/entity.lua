@@ -9,10 +9,6 @@ local entitymeta = {}
 entitymeta.__index = entitymeta
 math.random = love.math.random
 
-local function checkCollision(x1,y1,w1,h1, x2,y2,w2,h2)
-	return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
-end
-
 function entitymeta:Draw()
 	for k, v in pairs(ENTS) do
 		local pos = v.pos
@@ -23,6 +19,9 @@ end
 
 local entSpeed = 35
 function entitymeta:Update(dt)
+	local function checkCollision(x1,y1,w1,h1, x2,y2,w2,h2)
+		return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
+	end
 	for k, v in pairs(ENTS) do
 		local pos = v.pos
 		pos.y = pos.y + entSpeed * dt
@@ -72,7 +71,6 @@ function ent.Update()
 		if incSum > 10 then
 			incSum = incSum - 0.5
 		end
-		print(entSpeed, nextIncrement, round(frequency))
 	end
 	if round(frequency) > #ENTS and #ENTS < 10 then
 		ent.New(vector(math.random(20, love.window.getWidth() - 20), math.random(-400, -10)))

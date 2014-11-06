@@ -17,7 +17,6 @@ function game.Reload() -- reload game
 	newHighscore = false
 	player.x = 200
 	player.y = 380
-	player.speed = 500
 	player.score = 0
 	player.dead = false
 end

@@ -5,8 +5,9 @@ Author: Bayrock (http://Devinity.org)
 
 player = {
 	x = 200,
+	xVel = 0,
 	y = 380,
-	speed = 500,
+	speed = 800,
 	score = 0,
 	highscore = 0,
 	dead = false
@@ -32,15 +33,10 @@ end
 
 local keyDown = love.keyboard.isDown
 function player.Update(dt)
-	local movementSpeed = player.speed * dt
-	if keyDown("right") then
-		if player.x < windowWidth - 25 then
-			player.x = player.x + movementSpeed
-		end
-	elseif keyDown("left") then
-		if player.x > 25 then 
-			player.x = player.x - movementSpeed
-		end
+	if keyDown("right") and player.xVel <= player.speed then
+		player.xVel = player.xVel + player.speed * dt
+	elseif keyDown("left") and player.xVel >= -player.speed then
+		player.xVel = player.xVel - player.speed * dt
 	end
 	if player.dead then
 		gameloop:stop()
@@ -54,5 +50,13 @@ function player.Update(dt)
 		deadloop:stop()
 		gameloop:play()
 		player.score = player.score + dt
+		player.x = player.x + player.xVel * dt
+	end
+	if player.x < 25 then
+		player.x = 25
+		player.xVel = 0
+	elseif player.x > windowWidth - 25 then
+		player.x = windowWidth - 25
+		player.xVel = 0
 	end
 end
