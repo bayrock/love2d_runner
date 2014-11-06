@@ -3,27 +3,21 @@ conf.lua
 Author: Bayrock (http://Devinity.org)
 ]]
 
-game = {}
-ent = {}
-
 projectName = "Lua Runner "
-version = "v0.5"
+version = "v0.6"
 
 debug = true
 
 frequency = 5 -- block frequency
 nextIncrement = 15
 
-windowWidth = 700
-windowHeight = 400
-
 function love.conf(t)
     t.version = "0.9.1"
     t.console = true
     t.window.title = projectName.."- build: "..(version)
     t.window.icon = nil
-    t.window.width = windowWidth
-    t.window.height = windowHeight
+    t.window.width = 700
+    t.window.height = 400
     t.window.borderless = false
     t.window.resizable = false
     t.window.minwidth = 1

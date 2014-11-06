@@ -7,12 +7,13 @@ local ENTS = {}
 
 local entitymeta = {}
 entitymeta.__index = entitymeta
+
 math.random = love.math.random
 
 function entitymeta:Draw()
 	for k, v in pairs(ENTS) do
 		local pos = v.pos
-		lg.setColor(153, 204, 255)
+		lg.setColor(153,204,255)
 		lg.rectangle("fill", pos.x, pos.y, 50, 50)
 	end
 end
@@ -27,10 +28,10 @@ function entitymeta:Update(dt)
 		pos.y = pos.y + entSpeed * dt
 		if pos.y >= love.window.getHeight() + 10 then
 			pos.y = -10
-			pos.x = math.random(20, love.window.getWidth() - 20)
+			pos.x = math.random(20, windowHeight - 20)
 		end
 		if checkCollision(pos.x, pos.y, 50, 50, player.x - 25, player.y - 33.3, 50, 50) then
-			player.dead = true
+			Gamestate.switch(dead)
 			frequency = 0
 		end
 	end
@@ -45,14 +46,14 @@ function entitymeta:Kill()
 	end
 end
 
-function ent.KillAll()
+function entKillAll()
 	frequency = 0
 	for k,v in pairs(ENTS) do
 		ENTS = {}
 	end
 end
 
-function ent.New(pos)
+function entNew(pos)
 	local new = {}
 	new.pos = pos
 	setmetatable(new, entitymeta)
@@ -62,7 +63,7 @@ function ent.New(pos)
 	return new
 end
 
-function ent.Update()
+function entUpdate()
 	if player.score > nextIncrement then
 		local incSum = 15
 		nextIncrement = nextIncrement + incSum
@@ -73,16 +74,16 @@ function ent.Update()
 		end
 	end
 	if round(frequency) > #ENTS and #ENTS < 10 then
-		ent.New(vector(math.random(20, love.window.getWidth() - 20), math.random(-400, -10)))
+		entNew(vector(math.random(20, windowWidth - 20), math.random(-400, -10)))
 	elseif round(frequency) < #ENTS then
 		for k, v in pairs(ENTS) do v:Kill() end
 	end
 end
 
-function ent.GetAll()
+function entGetAll()
 	return ENTS
 end
 
-function ent.Count()
+function entCount()
 	return #ENTS
 end
