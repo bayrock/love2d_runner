@@ -26,9 +26,9 @@ function entitymeta:Update(dt)
 	for k, v in pairs(ENTS) do
 		local pos = v.pos
 		pos.y = pos.y + entSpeed * dt
-		if pos.y >= love.window.getHeight() + 10 then
+		if pos.y >= windowHeight + 10 then
 			pos.y = -10
-			pos.x = math.random(20, windowHeight - 20)
+			pos.x = math.random(20, windowWidth - 20)
 		end
 		if checkCollision(pos.x, pos.y, 50, 50, player.x - 25, player.y - 33.3, 50, 50) then
 			Gamestate.switch(dead)
