@@ -6,7 +6,7 @@ Author: Bayrock (http://Devinity.org)
 projectName = "Lua Runner "
 version = "v0.6"
 
-debug = true
+debug = false
 
 frequency = 5 -- block frequency
 nextIncrement = 15

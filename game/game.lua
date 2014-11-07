@@ -12,6 +12,10 @@ lg = love.graphics
 
 game = {} -- main state constructor
 
+local function font(size, font) 
+	return lg.newFont(font or "game/font/coders_crux.ttf", size)
+end
+
 function game:enter()
 	lg.setBackgroundColor(64, 64, 64)
 	gameloop:play()
@@ -32,6 +36,7 @@ end
 
 function game:draw() -- draw game
 	for k,v in pairs(entGetAll()) do v:Draw() end
+	lg.setFont(font(24))
 	player.Draw()
 	if debug then
 		lg.print(projectName..version, 5, 5)
@@ -80,18 +85,36 @@ menu = {} -- menu state constructor
 function menu:init()
 	lg.setBackgroundColor(0, 51, 51)
 	local volume = love.audio.getVolume()
-	gameloop = love.audio.newSource("sound/gameloop.mp3")
+	gameloop = love.audio.newSource("game/sound/gameloop.mp3")
 	gameloop:setLooping(true)
-	menuloop = love.audio.newSource("sound/menuloop.mp3")
+	menuloop = love.audio.newSource("game/sound/menuloop.mp3")
 	menuloop:setLooping(true)
 	menuloop:play()
 	love.audio.setVolume(volume * 0.15)
 end
 
+local alphaAnim = 253
 function menu:draw()
     local w,h = windowWidth, windowHeight
-    lg.setColor(255,255,255)
-    lg.printf("Press space to play", 0, h/2, w, "center")
+	love.graphics.setFont(font(32))
+	lg.setColor(153,153,255)
+	lg.printf(projectName..version, 0, h/2 - 40, w, "center")
+	lg.setColor(255,255,255, alphaAnim)
+	lg.printf("Press space to play", 0, h/2, w, "center")
+end
+
+local anim = false
+function menu:update(dt)
+	if alphaAnim >= 254 then
+		anim = false
+	elseif alphaAnim <= 30 then
+		anim = true
+	end
+	if anim then
+		alphaAnim = alphaAnim + 90 * dt
+	else
+		alphaAnim = alphaAnim - 90 * dt
+	end
 end
 
 function menu:keyreleased(key)
@@ -111,15 +134,16 @@ end
 function dead:draw()
 	local w,h = windowWidth, windowHeight
 	lg.setColor(255,255,255)
-	lg.printf("Game over!", 0, h/2 - 65, w, "center")
+	lg.setFont(font(32))
+	lg.printf("Game over!", 0, h/2 - 80, w, "center")
 	lg.printf("You scored: "..round(player.score, 1), 0, h/2 - 35, w, "center")
-	lg.printf("Space to replay", 0, h/2 + 15, w, "center")
-	lg.printf("backspace for menu", 0, h/2 + 30, w, "center")
+	lg.printf("Space to replay", 0, h/2 + 30, w, "center")
+	lg.printf("backspace for menu", 0, h/2 + 50, w, "center")
 	if newHighscore then
 		lg.setColor(51, 255, 255)
-		lg.printf("New highscore!", 0, h/2 - 20, w, "center")
+		lg.printf("New highscore!", 0, h/2 - 15, w, "center")
 	else
-		lg.printf("Highscore: "..round(player.highscore, 1), 0, h/2 - 20, w, "center")
+		lg.printf("Highscore: "..round(player.highscore, 1), 0, h/2 - 15, w, "center")
 	end
 end
 
@@ -141,11 +165,12 @@ end
 function pause:draw()
     local w,h = windowWidth, windowHeight
     self.from:draw() -- draw previous state
+	lg.setFont(font(32))
     lg.setColor(0,0,0 ,100)
     lg.rectangle("fill", 0,0, w,h)
     lg.setColor(255,255,255)
     lg.printf("PAUSED", 0, h/2, w, "center")
-   	lg.printf("Press any key to continue", 0, h/2 + 15, w, "center")
+   	lg.printf("Press any key to continue", 0, h/2 + 20, w, "center")
 end
 
 function pause:keypressed(key)
