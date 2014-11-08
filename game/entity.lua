@@ -31,7 +31,7 @@ function entitymeta:Update(dt)
 			pos.x = math.random(20, windowWidth - 20)
 		end
 		if checkCollision(pos.x, pos.y, 50, 50, player.x - 25, player.y - 33.3, 50, 50) then
-			Gamestate.switch(dead)
+			gamestate.switch(dead)
 			frequency = 0
 		end
 	end
@@ -74,7 +74,7 @@ function entUpdate()
 		end
 	end
 	if round(frequency) > #ENTS and #ENTS < 10 then
-		entNew(vector(math.random(20, windowWidth - 20), math.random(-400, -10)))
+		entNew(vector(math.random(20, windowWidth - 20), math.random(-800, -10)))
 	elseif round(frequency) < #ENTS then
 		for k, v in pairs(ENTS) do v:Kill() end
 	end

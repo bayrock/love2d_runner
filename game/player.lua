@@ -37,13 +37,13 @@ function player.Update(dt)
 	elseif keyDown("left") and player.xVel > -player.speed then
 		player.xVel = player.xVel - player.speed * dt
 	end
-	if Gamestate.current() == dead then
+	if gamestate.current() == dead then
 		entKillAll()
 		if player.score > player.highscore then
 			newHighscore = true
 			player.highscore = player.score
 		end
-	elseif Gamestate.current() == game then
+	elseif gamestate.current() == game then
 		player.score = player.score + dt
 		player.x = player.x + player.xVel * dt
 	end
