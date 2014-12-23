@@ -3,29 +3,33 @@ game.lua
 Author: Bayrock (http://Devinity.org)
 ]]
 
+require("game.menu")
 require("game.player")
 require("game.entity")
 
-windowWidth = love.graphics.getWidth()
-windowHeight = love.graphics.getHeight()
 lg = love.graphics
+windowWidth = lg.getWidth()
+windowHeight = lg.getHeight()
 
-game = {} -- main state constructor
+game = {} -- game state constructor
 function game:init()
 	gameloop = love.audio.newSource("game/sound/gameloop.mp3")
 	gameloop:setLooping(true)
 end
 
-function game:enter()
-	lg.setBackgroundColor(64, 64, 64)
-	gameloop:play()
-	frequency = 5
-	nextIncrement = 15
+local function reset()
+	resetFrequency()
 	newHighscore = false
 	player.x = 200
 	player.xVel = 0
 	player.y = 380
 	player.score = 0
+end
+
+function game:enter()
+	lg.setBackgroundColor(64, 64, 64)
+	gameloop:play()
+	reset()
 end
 
 function game:update(dt) -- update game
@@ -34,10 +38,7 @@ function game:update(dt) -- update game
 	entUpdate()
 end
 
-function game:draw() -- draw game
-	for k,v in pairs(entGetAll()) do v:Draw() end
-	lg.setFont(font(24))
-	player.Draw()
+local function drawDebug()
 	if debug then
 		lg.print(projectName..version, 5, 5)
 		lg.print("FPS: "..love.timer.getFPS( ), 5, 20)
@@ -51,6 +52,13 @@ function game:draw() -- draw game
 		lg.print(projectName..version, 5, 5)
 		lg.print("Score: "..round(player.score, 1), 5, 20)
 	end
+end
+
+function game:draw() -- draw game
+	for k,v in pairs(entGetAll()) do v:Draw() end
+	lg.setFont(font(24))
+	player.Draw()
+	drawDebug()
 end
 
 function game:keypressed(key)

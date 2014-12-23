@@ -3,8 +3,13 @@ menu.lua
 Author: Bayrock (http://Devinity.org)
 ]]
 
-function font(size, font) 
+function font(size, font)
 	return lg.newFont(font or "game/font/coders_crux.ttf", size)
+end
+
+function round(num, idp) -- round to the nearest whole number or decimal
+	local mult = 10^(idp or 0)
+	return math.floor(num * mult + 0.5) / mult
 end
 
 menu = {} -- menu state constructor
@@ -20,7 +25,7 @@ end
 local alphaAnim = 253
 function menu:draw()
 	local w,h = windowWidth, windowHeight
-	love.graphics.setFont(font(32))
+	lg.setFont(font(32))
 	lg.setColor(153,153,255)
 	lg.printf(projectName..version, 0, h/2 - 40, w, "center")
 	lg.setColor(255,255,255, alphaAnim)
@@ -53,6 +58,11 @@ function dead:enter()
 	lg.setBackgroundColor(0, 51, 51)
 	gameloop:stop()
 	menuloop:play()
+	entKillAll()
+	if player.score > player.highscore then
+		newHighscore = true
+		player.highscore = player.score
+	end
 end
 
 function dead:draw()

@@ -18,6 +18,7 @@ function entitymeta:Draw()
 	end
 end
 
+local frequency = 5
 local entSpeed = 35
 function entitymeta:Update(dt)
 	local function checkCollision(x1,y1,w1,h1, x2,y2,w2,h2)
@@ -48,21 +49,20 @@ end
 
 function entKillAll()
 	frequency = 0
-	for k,v in pairs(ENTS) do
-		ENTS = {}
-	end
+	ENTS = {}
 end
 
 function entNew(pos)
 	local new = {}
 	new.pos = pos
 	setmetatable(new, entitymeta)
-	
+
 	table.insert(ENTS, new)
-	
+
 	return new
 end
 
+local nextIncrement = 15 -- frequency increment
 function entUpdate()
 	if player.score > nextIncrement then
 		local incSum = 15
@@ -86,4 +86,9 @@ end
 
 function entCount()
 	return #ENTS
+end
+
+function resetFrequency()
+	frequency = 5
+	nextIncrement = 15
 end

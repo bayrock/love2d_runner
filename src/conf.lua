@@ -8,13 +8,10 @@ version = "v0.6"
 
 debug = false
 
-frequency = 5 -- block frequency
-nextIncrement = 15
-
 function love.conf(t)
     t.version = "0.9.1"
     t.console = true
-    t.window.title = projectName.."- build: "..(version)
+    t.window.title = projectName.."- build: "..version
     t.window.icon = nil
     t.window.width = 700
     t.window.height = 400
