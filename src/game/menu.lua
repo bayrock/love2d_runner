@@ -62,15 +62,39 @@ function menu:keyreleased(key)
 end
 
 dead = {} -- dead state constructor
+local function save()
+	local savTbl = {}
+	if not love.filesystem.exists("score.sav") then
+		love.filesystem.write("score.sav", "")
+		print("Save file did not exist or could not be found")
+		print("Creating file..")
+	else
+	print("Loaded highscore from file")
+	end
+	for lines in love.filesystem.lines("score.sav") do
+		table.insert(savTbl, lines)
+	end
+	if savTbl[1] and tonumber(savTbl[1]) > player.score then
+		player.highscore = tonumber(savTbl[1])
+	end
+	saved = true
+end
+
+function dead:init()
+	save()
+end
+
 function dead:enter()
 	lg.setBackgroundColor(0, 51, 51)
 	alpha = 255
 	gameloop:stop()
 	menuloop:play()
 	entKillAll()
-	if player.score > player.highscore then
+	if saved and player.score > player.highscore then
 		newHighscore = true
 		player.highscore = player.score
+		love.filesystem.write("score.sav", player.highscore)
+		print("Saved highscore to file")
 	end
 end
 
@@ -87,6 +111,7 @@ function dead:draw()
 		lg.setColor(51, 255, 255)
 		lg.printf("New highscore!", 0, h/2 - 15, w, "center")
 	else
+		lg.setColor(255,255,255)
 		lg.printf("Highscore: "..round(player.highscore, 1), 0, h/2 - 15, w, "center")
 	end
 end

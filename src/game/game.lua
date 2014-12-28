@@ -64,10 +64,10 @@ end
 function game:keypressed(key)
 	if key == "`" and not debug or key == "/" and not debug then
 		debug = true
-		print("Debug overlay enabled")
+		print("Enabled debugging")
 	elseif key == "`" and debug or key == "/" and debug then
 		debug = false
-	 	print("Debug overlay disabled")
+	 	print("Disabled debugging")
 	end
 	if key == " " then
 		gamestate.push(pause)
