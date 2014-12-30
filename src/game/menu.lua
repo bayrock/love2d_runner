@@ -40,13 +40,13 @@ local animate = false
 function anim(dt)
 	if alpha >= 254 then
 		animate = false
-		elseif alpha <= 30 then
-			animate = true
-		end
-		if animate then
-			alpha = alpha + 90 * dt
-		else
-			alpha = alpha - 90 * dt
+	elseif alpha <= 30 then
+		animate = true
+	end
+	if animate then
+		alpha = alpha + 90 * dt
+	else
+		alpha = alpha - 90 * dt
 	end
 end
 
@@ -75,7 +75,7 @@ local function save()
 		table.insert(sav, lines)
 	end
 	if sav[1] and tonumber(sav[1]) > player.score then
-		player.highscore = tonumber(sav[1])
+		player.highscore = tonumber(sav[1]) -- set saved highscore
 	end
 	saved = true
 end
