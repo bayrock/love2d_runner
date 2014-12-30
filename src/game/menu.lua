@@ -63,19 +63,19 @@ end
 
 dead = {} -- dead state constructor
 local function save()
-	local savTbl = {}
+	local sav = {}
 	if not love.filesystem.exists("score.sav") then
-		love.filesystem.write("score.sav", "")
 		print("Save file did not exist or could not be found")
 		print("Creating file..")
+		love.filesystem.write("score.sav", "")
 	else
-	print("Loaded highscore from file")
+		print("Loaded highscore from file")
 	end
 	for lines in love.filesystem.lines("score.sav") do
-		table.insert(savTbl, lines)
+		table.insert(sav, lines)
 	end
-	if savTbl[1] and tonumber(savTbl[1]) > player.score then
-		player.highscore = tonumber(savTbl[1])
+	if sav[1] and tonumber(sav[1]) > player.score then
+		player.highscore = tonumber(sav[1])
 	end
 	saved = true
 end
