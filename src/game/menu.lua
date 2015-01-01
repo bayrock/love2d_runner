@@ -67,7 +67,11 @@ local function save()
 	if not love.filesystem.exists("score.sav") then
 		print("Save file did not exist or could not be found")
 		print("Creating file..")
-		love.filesystem.write("score.sav", "")
+		if love.filesystem.write("score.sav", "") then
+			print("Created sav file successfully!")
+		else
+			print("Error creating sav file!")
+		end
 	else
 		print("Loaded highscore from file")
 	end
@@ -93,8 +97,11 @@ function dead:enter()
 	if saved and player.score > player.highscore then
 		newHighscore = true
 		player.highscore = player.score
-		love.filesystem.write("score.sav", player.highscore)
-		print("Saved highscore to file")
+		if love.filesystem.write("score.sav", player.highscore) then
+			print("Saved highscore to file")
+		else
+			print("Error writing highscore to file!")
+		end
 	end
 end
 

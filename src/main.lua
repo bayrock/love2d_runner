@@ -8,6 +8,7 @@ gamestate = require ("libs.gamestate")
 vector = require("libs.vector")
 
 function love.load()
+	love.filesystem.setIdentity("love2d_runner")
 	gamestate.registerEvents()
 	gamestate.switch(menu)
 	print("Loaded "..projectName..version)
