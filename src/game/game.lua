@@ -34,22 +34,22 @@ end
 
 function game:update(dt) -- update game
 	for k,v in pairs(entGetAll()) do v:Update(dt) end
-	player.Update(dt)
 	entUpdate()
+	player.Update(dt)
 end
 
 local function drawDebug()
 	if debug then
-		lg.print(projectName..version, 5, 5)
-		lg.print("FPS: "..love.timer.getFPS( ), 5, 20)
+		lg.print(projectName, 5, 5)
+		lg.print("FPS: "..love.timer.getFPS(), 5, 20)
 		lg.print("Player X: "..math.floor(player.x), 5, 35)
 		lg.print("Entities: "..entCount(), 5, 50)
 		lg.print("Score: "..round(player.score, 1), 5, 65)
 		lg.setColor(0,0,0, 127)
 		lg.point(player.x, player.y)
-		lg.rectangle("line", player.x - 25, player.y - 33.3, 50, 50)
+		lg.rectangle("line", player.x, player.y - 35, 50, 50)
 	else
-		lg.print(projectName..version, 5, 5)
+		lg.print(projectName, 5, 5)
 		lg.print("Score: "..round(player.score, 1), 5, 20)
 	end
 end

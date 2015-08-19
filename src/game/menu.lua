@@ -27,7 +27,7 @@ function menu:draw()
 	local w,h = windowWidth, windowHeight
 	lg.setFont(font(32))
 	lg.setColor(153,153,255)
-	lg.printf(projectName..version, 0, h/2 - 40, w, "center")
+	lg.printf(projectName, 0, h/2 - 40, w, "center")
 	lg.setColor(255,255,255, alpha)
 	lg.printf("Press space to play", 0, h/2, w, "center")
 end

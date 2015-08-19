@@ -3,15 +3,17 @@ conf.lua
 Author: Bayrock (http://Devinity.org)
 ]]
 
-projectName = "Lua Runner "
-version = "v0.6"
+local title = "Lua Runner"
+local version = "v0.7"
+
+projectName = string.format("%s %s", title, version)
 
 debug = false
 
 function love.conf(t)
     t.version = "0.9.1"
     t.console = true
-    t.window.title = projectName.."- build: "..version
+    t.window.title = projectName
     t.window.icon = nil
     t.window.width = 700
     t.window.height = 400

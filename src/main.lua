@@ -11,7 +11,7 @@ function love.load()
 	love.filesystem.setIdentity("love2d_runner")
 	gamestate.registerEvents()
 	gamestate.switch(menu)
-	print("Loaded "..projectName..version)
+	print("Loaded "..projectName)
 end
 
 function love.keyreleased(key)

@@ -13,19 +13,10 @@ player = {
 }
 
 function player.Draw()
-	local function triangleCenter(x1,y1,x2,y2,x3,y3)
-   		return (x1+x2+x3)/3,(y1+y2+y3)/3
-	end
-	local x1,y1,x2,y2,x3,y3 = 0,0,100,0,50,100
-	local cx,cy = triangleCenter(x1,y1,x2,y2,x3,y3)
-	
 	lg.setColor(153,153,255)
 	lg.push() -- draw the player
 	lg.translate(player.x,player.y)
-	lg.scale(0.5,0.5)
-	lg.rotate(math.pi)
-	lg.translate(-cx,-cy) -- translate center
-	lg.polygon('fill',x1,y1,x2,y2,x3,y3)
+	lg.rectangle('fill', 0, -35, 50, 50)
 	lg.pop()
 end
 
@@ -38,11 +29,11 @@ function player.Update(dt)
 	elseif keyDown("left") and player.xVel > -player.speed then
 		player.xVel = player.xVel - player.speed * dt
 	end
-	if player.x < 25 then
-		player.x = 25
+	if player.x < 0 then
+		player.x = 0
 		player.xVel = 0
-	elseif player.x > windowWidth - 25 then
-		player.x = windowWidth - 25
+	elseif player.x > windowWidth - 50 then
+		player.x = windowWidth - 50
 		player.xVel = 0
 	end
 end
