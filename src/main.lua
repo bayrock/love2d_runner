@@ -4,8 +4,8 @@ Author: Bayrock (http://Devinity.org)
 ]]
 
 require("game.game")
-gamestate = require ("libs.gamestate")
-vector = require("libs.vector")
+gamestate = require ("lib.gamestate")
+vector = require("lib.vector")
 
 function love.load()
 	love.filesystem.setIdentity("love2d_runner")
