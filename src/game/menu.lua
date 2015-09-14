@@ -37,7 +37,7 @@ function menu:enter()
 end
 
 local animate = false
-function anim(dt)
+function menu:anim(dt)
 	if alpha >= 254 then
 		animate = false
 	elseif alpha <= 30 then
@@ -51,18 +51,20 @@ function anim(dt)
 end
 
 function menu:update(dt)
-	anim(dt)
+	self:anim(dt)
 end
 
-function menu:keyreleased(key)
+function menu:keypressed(key)
 	if key == " " then
 		menuloop:stop()
 		gamestate.switch(game)
+	elseif key == "`" then
+		gamestate.push(console)
 	end
 end
 
 dead = {} -- dead state constructor
-local function save()
+function dead:save()
 	local sav = {}
 	if not love.filesystem.exists("score.sav") then
 		print("Save file did not exist or could not be found")
@@ -85,7 +87,7 @@ local function save()
 end
 
 function dead:init()
-	save()
+	self:save()
 end
 
 function dead:enter()
@@ -124,7 +126,7 @@ function dead:draw()
 end
 
 function dead:update(dt)
-	anim(dt)
+	menu:anim(dt)
 end
 
 function dead:keypressed(key)
@@ -133,13 +135,15 @@ function dead:keypressed(key)
 	elseif key == " " then
 		menuloop:stop()
 		gamestate.switch(game)
+	elseif key == "`" then
+		gamestate.push(console)
 	end
 end
 
 pause = {} -- pause state constructor
 function pause:enter(from)
 	self.from = from -- record previous state
-	gameloop:pause()
+	love.audio.pause()
 end
 
 function pause:draw()
@@ -154,6 +158,10 @@ function pause:draw()
 end
 
 function pause:keypressed(key)
-	gamestate.pop() -- return previous state
-	gameloop:play()
+	if key == "`" then
+		gamestate.push(console)
+	else
+		gamestate.pop() -- return previous state
+		love.audio.resume()
+	end
 end

@@ -6,6 +6,8 @@ Author: Bayrock (http://Devinity.org)
 require("game.menu")
 require("game.player")
 require("game.entity")
+require("game.console")
+require("game.commands")
 
 lg = love.graphics
 windowWidth = lg.getWidth()
@@ -38,7 +40,7 @@ function game:update(dt) -- update game
 	player.Update(dt)
 end
 
-local function drawDebug()
+function game:debug()
 	if debug then
 		lg.print(projectName, 5, 5)
 		lg.print("FPS: "..love.timer.getFPS(), 5, 20)
@@ -58,18 +60,13 @@ function game:draw() -- draw game
 	for k,v in pairs(entGetAll()) do v:Draw() end
 	lg.setFont(font(24))
 	player.Draw()
-	drawDebug()
+	self:debug()
 end
 
 function game:keypressed(key)
-	if key == "`" and not debug or key == "/" and not debug then
-		debug = true
-		print("Enabled debugging")
-	elseif key == "`" and debug or key == "/" and debug then
-		debug = false
-	 	print("Disabled debugging")
-	end
-	if key == " " then
+	if key == "`" then
+		gamestate.push(console)
+	elseif key == " " then
 		gamestate.push(pause)
 	end
 end
