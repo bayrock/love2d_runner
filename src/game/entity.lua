@@ -17,11 +17,11 @@ function entitymeta:Draw()
 
 		if id == "entity" then
 			lg.setColor(153,204,255)
+			lg.rectangle("fill", pos.x, pos.y, 50, 50)
 		elseif id == "powerup" then
 			lg.setColor(253,255,150)
+			lg.rectangle("fill", pos.x, pos.y, 25, 25)
 		end
-
-		lg.rectangle("fill", pos.x, pos.y, 50, 50)
 	end
 end
 
@@ -44,8 +44,9 @@ function entitymeta:Update(dt)
 			end
 		elseif id == "powerup" then
 			pos.y = pos.y + (entSpeed - 10) * dt
-			if checkCollision(pos.x, pos.y, 50, 50, player.x, player.y - 35, 50, 50) then
-				v:Kill()
+			if checkCollision(pos.x, pos.y, 25, 25, player.x, player.y - 35, 25, 25) then
+				v:Kill() -- remove powerup
+				player.score = player.score + 5
 				frequency = frequency - 1
 			end
 		end
@@ -83,6 +84,11 @@ function entNew(pos, id)
 	return new
 end
 
+function randomVec()
+	local vec = vector(math.random(20, windowWidth - 20), math.random(-800, -10))
+	return vec
+end
+
 local incSum = 10
 local nextIncrement = incSum
 function entUpdate()
@@ -91,17 +97,18 @@ function entUpdate()
 		frequency = frequency + 1
 	end
 
-	local vec = vector(math.random(20, windowWidth - 20), math.random(-800, -10))
 	if round(frequency) > #ENTS then
 		local rand = math.random(1, 4)
 
 		if rand < 4 or nextIncrement == 10 then
-			entNew(vec, "entity")
+			entNew(randomVec(), "entity")
 		elseif nextIncrement > 10 then
-			entNew(vec, "powerup")
+			entNew(randomVec(), "powerup")
 		end
 	elseif round(frequency) < #ENTS then
-		return ENTS[#ENTS]:Kill()
+		if not debug then
+			return ENTS[#ENTS]:Kill()
+		end
 	end
 end
 

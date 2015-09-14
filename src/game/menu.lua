@@ -96,7 +96,8 @@ function dead:enter()
 	gameloop:stop()
 	menuloop:play()
 	entKillAll()
-	if saved and player.score > player.highscore then
+	if saved and player.score > player.highscore
+	and not debug then
 		newHighscore = true
 		player.highscore = player.score
 		if love.filesystem.write("score.sav", player.highscore) then

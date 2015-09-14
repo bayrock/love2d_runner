@@ -12,7 +12,7 @@ debug = false
 
 function love.conf(t)
     t.version = "0.9.1"
-    t.console = true
+    t.console = false
     t.window.title = projectName
     t.window.icon = nil
     t.window.width = 700
