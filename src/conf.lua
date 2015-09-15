@@ -1,10 +1,10 @@
 --[[
 conf.lua
-Author: Bayrock (http://Devinity.org)
+Author: Bayrock
 ]]
 
 local title = "Lua Runner"
-local version = "v0.7"
+local version = "v0.8"
 
 projectName = string.format("%s %s", title, version)
 

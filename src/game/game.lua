@@ -1,6 +1,6 @@
 --[[
 game.lua
-Author: Bayrock (http://Devinity.org)
+Author: Bayrock
 ]]
 
 require("game.menu")
@@ -10,8 +10,8 @@ require("game.console")
 require("game.commands")
 
 lg = love.graphics
-windowWidth = lg.getWidth()
-windowHeight = lg.getHeight()
+windowW = lg.getWidth()
+windowH = lg.getHeight()
 
 game = {} -- game state constructor
 function game:init()
@@ -21,6 +21,7 @@ end
 
 local function reset()
 	resetFrequency()
+	resetBonus()
 	newHighscore = false
 	player.x = 200
 	player.xVel = 0
@@ -41,6 +42,7 @@ function game:update(dt) -- update game
 end
 
 function game:debug()
+	lg.setColor(153,153,255)
 	if debug then
 		lg.print(projectName, 5, 5)
 		lg.print("FPS: "..love.timer.getFPS(), 5, 20)
@@ -60,6 +62,7 @@ function game:draw() -- draw game
 	for k,v in pairs(entGetAll()) do v:Draw() end
 	lg.setFont(font(24))
 	player.Draw()
+	bonusDraw()
 	self:debug()
 end
 

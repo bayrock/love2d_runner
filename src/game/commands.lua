@@ -29,5 +29,7 @@ AddCommand("powerup", function(txt)
   if debug then
     entNew(randomVec(), "powerup")
     print("Spawned powerup", 204, 255, 153)
+  else
+    print("Invalid command: 'powerup'", 255, 102, 102)
   end
 end)

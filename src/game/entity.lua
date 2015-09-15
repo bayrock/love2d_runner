@@ -1,6 +1,6 @@
 --[[
 entity.lua
-Author: Bayrock (http://Devinity.org)
+Author: Bayrock
 ]]
 
 local ENTS = {}
@@ -17,7 +17,7 @@ function entitymeta:Draw()
 
 		if id == "entity" then
 			lg.setColor(153,204,255)
-			lg.rectangle("fill", pos.x, pos.y, 50, 50)
+			lg.rectangle("fill", pos.x, pos.y, 40, 40)
 		elseif id == "powerup" then
 			lg.setColor(253,255,150)
 			lg.rectangle("fill", pos.x, pos.y, 25, 25)
@@ -38,22 +38,22 @@ function entitymeta:Update(dt)
 
 		if id == "entity" then
 			pos.y = pos.y + entSpeed * dt
-			if checkCollision(pos.x, pos.y, 50, 50, player.x, player.y - 35, 50, 50) then
+			if checkCollision(pos.x, pos.y, 40, 40, player.x, player.y - 35, 50, 50) then
 				gamestate.switch(dead)
 				frequency = 0
 			end
 		elseif id == "powerup" then
 			pos.y = pos.y + (entSpeed - 10) * dt
-			if checkCollision(pos.x, pos.y, 25, 25, player.x, player.y - 35, 25, 25) then
+			if checkCollision(pos.x, pos.y, 25, 25, player.x, player.y - 35, 50, 50) then
+				AddBonus(pos.x, pos.y, player.score + 5)
 				v:Kill() -- remove powerup
-				player.score = player.score + 5
 				frequency = frequency - 1
 			end
 		end
 
-		if pos.y >= windowHeight + 10 then
+		if pos.y >= windowH + 10 then
 			pos.y = -10
-			pos.x = math.random(20, windowWidth - 20)
+			pos.x = math.random(20, windowW - 20)
 		end
 	end
 end
@@ -63,6 +63,30 @@ function entitymeta:Kill()
 		if v == self then
 			table.remove(ENTS, k)
 			break
+		end
+	end
+end
+
+local bonus ={}
+function AddBonus(x, y, score, gain)
+	player.score = player.score + (gain or 5)
+	table.insert(bonus, {x, y, score})
+end
+
+function resetBonus()
+	bonus = {}
+end
+
+function bonusDraw()
+	for _, tbl in pairs(bonus) do
+		local x, y, score = tbl[1], tbl[2], tbl[3]
+
+		lg.setColor(153, 255, 153)
+		if score + 2 > player.score then
+			local diff = score - player.score
+			lg.printf("+5", x, y + diff * 10, windowW)
+		else
+			table.remove(bonus, _)
 		end
 	end
 end
@@ -85,7 +109,7 @@ function entNew(pos, id)
 end
 
 function randomVec()
-	local vec = vector(math.random(20, windowWidth - 20), math.random(-800, -10))
+	local vec = vector(math.random(20, windowW - 20), math.random(-800, -10))
 	return vec
 end
 
@@ -98,11 +122,11 @@ function entUpdate()
 	end
 
 	if round(frequency) > #ENTS then
-		local rand = math.random(1, 4)
+		local rand = math.random(1, 3)
 
-		if rand < 4 or nextIncrement == 10 then
+		if rand < 3 or nextIncrement == 10 then
 			entNew(randomVec(), "entity")
-		elseif nextIncrement > 10 then
+		elseif nextIncrement > 10 then -- not if we just started
 			entNew(randomVec(), "powerup")
 		end
 	elseif round(frequency) < #ENTS then

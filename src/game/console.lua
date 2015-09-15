@@ -45,16 +45,16 @@ end
 
 function console:display()
 	lg.setColor(64, 64, 64, 200)
-	lg.rectangle("fill", 0, 0, windowWidth, windowHeight)
+	lg.rectangle("fill", 0, 0, windowW, windowH)
 	lg.setColor(255, 255, 255)
-	lg.printf(carrot, 5, windowHeight - 30, windowWidth)
-	lg.printf(text, 20, windowHeight - 30, windowWidth)
+	lg.printf(carrot, 5, windowH - 30, windowW)
+	lg.printf(text, 20, windowH - 30, windowW)
 
 	for k, tbl in pairs(prints) do
 		local txt = tbl[1]
 		local r, g, b = tbl[2], tbl[3], tbl[4]
 
-		if k > 20 then
+		if k > 15 then
 			table.remove(prints, 1)
 		end
 
@@ -64,7 +64,7 @@ function console:display()
 			lg.setColor(255, 255, 255)
 		end
 
-		lg.printf("> "..txt, 20, k * 20, windowWidth)
+		lg.printf("> "..txt, 20, k * 20, windowW)
 	end
 end
 

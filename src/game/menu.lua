@@ -1,6 +1,6 @@
 --[[
 menu.lua
-Author: Bayrock (http://Devinity.org)
+Author: Bayrock
 ]]
 
 function font(size, font)
@@ -24,7 +24,7 @@ end
 
 local alpha = 253
 function menu:draw()
-	local w,h = windowWidth, windowHeight
+	local w,h = windowW, windowH
 	lg.setFont(font(32))
 	lg.setColor(153,153,255)
 	lg.printf(projectName, 0, h/2 - 40, w, "center")
@@ -72,7 +72,7 @@ function dead:save()
 		if love.filesystem.write("score.sav", "") then
 			print("Created sav file successfully!")
 		else
-			print("Error creating sav file!")
+			print("Error creating sav file!", 255, 102, 102)
 		end
 	else
 		print("Loaded highscore from file")
@@ -103,13 +103,13 @@ function dead:enter()
 		if love.filesystem.write("score.sav", player.highscore) then
 			print("Saved highscore to file")
 		else
-			print("Error writing highscore to file!")
+			print("Error writing highscore to file!", 255, 102, 102)
 		end
 	end
 end
 
 function dead:draw()
-	local w,h = windowWidth, windowHeight
+	local w,h = windowW, windowH
 	lg.setColor(255,255,255)
 	lg.setFont(font(32))
 	lg.printf("Game over!", 0, h/2 - 80, w, "center")
@@ -148,7 +148,7 @@ function pause:enter(from)
 end
 
 function pause:draw()
-	local w,h = windowWidth, windowHeight
+	local w,h = windowW, windowH
 	self.from:draw() -- draw previous state
 	lg.setFont(font(32))
 	lg.setColor(0,0,0 ,100)

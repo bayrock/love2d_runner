@@ -1,6 +1,6 @@
 --[[
 player.lua
-Author: Bayrock (http://Devinity.org)
+Author: Bayrock
 ]]
 
 player = {
@@ -32,8 +32,8 @@ function player.Update(dt)
 	if player.x < 0 then
 		player.x = 0
 		player.xVel = 0
-	elseif player.x > windowWidth - 50 then
-		player.x = windowWidth - 50
+	elseif player.x > windowW - 50 then
+		player.x = windowW - 50
 		player.xVel = 0
 	end
 end
