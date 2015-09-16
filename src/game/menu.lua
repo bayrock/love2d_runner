@@ -72,7 +72,7 @@ function dead:save()
 		if love.filesystem.write("score.sav", "") then
 			print("Created sav file successfully!")
 		else
-			print("Error creating sav file!", 255, 102, 102)
+			printError("Error creating sav file!")
 		end
 	else
 		print("Loaded highscore from file")
@@ -103,7 +103,7 @@ function dead:enter()
 		if love.filesystem.write("score.sav", player.highscore) then
 			print("Saved highscore to file")
 		else
-			print("Error writing highscore to file!", 255, 102, 102)
+			printError("Error writing highscore to file!")
 		end
 	end
 end

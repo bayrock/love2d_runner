@@ -77,7 +77,7 @@ function resetBonus()
 	bonus = {}
 end
 
-function bonusDraw()
+function drawBonus()
 	for _, tbl in pairs(bonus) do
 		local x, y, score = tbl[1], tbl[2], tbl[3]
 
@@ -122,9 +122,9 @@ function entUpdate()
 	end
 
 	if round(frequency) > #ENTS then
-		local rand = math.random(1, 3)
+		local rand = math.random(1, 2)
 
-		if rand < 3 or nextIncrement == 10 then
+		if rand < 2 or nextIncrement == 10 then
 			entNew(randomVec(), "entity")
 		elseif nextIncrement > 10 then -- not if we just started
 			entNew(randomVec(), "powerup")

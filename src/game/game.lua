@@ -62,7 +62,7 @@ function game:draw() -- draw game
 	for k,v in pairs(entGetAll()) do v:Draw() end
 	lg.setFont(font(24))
 	player.Draw()
-	bonusDraw()
+	drawBonus()
 	self:debug()
 end
 

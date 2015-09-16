@@ -12,10 +12,10 @@ end
 AddCommand("debug", function()
   if not debug then
     debug = true
-    print("Enabled debugging", 204, 255, 153)
+    printSuccess("Enabled debugging")
   else
     debug = false
-    print("Disabled debugging", 204, 255, 153)
+    printSuccess("Disabled debugging")
   end
 end)
 
@@ -28,8 +28,8 @@ end)
 AddCommand("powerup", function(txt)
   if debug then
     entNew(randomVec(), "powerup")
-    print("Spawned powerup", 204, 255, 153)
+    printSuccess("Spawned powerup")
   else
-    print("Invalid command: 'powerup'", 255, 102, 102)
+    printError("Invalid command: 'powerup'")
   end
 end)

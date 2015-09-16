@@ -8,9 +8,17 @@ function print(txt, r, g, b)
 	table.insert(prints, {txt, r, g, b})
 end
 
+function printSuccess(txt)
+	table.insert(prints, {txt, 204, 255, 153})
+end
+
+function printError(txt)
+	table.insert(prints, {txt, 255, 102, 102})
+end
+
 console = {} -- console state constructor
 function console:init()
-	-- initialize
+	love.keyboard.setKeyRepeat(true)
 end
 
 local carrot = ">"
@@ -18,7 +26,6 @@ function console:enter(from)
 	self.from = from -- record previous state
 	love.audio.pause()
 	carrot = ">" -- reset carrot
-	love.keyboard.setKeyRepeat(true)
 	love.keyboard.setTextInput(true)
 end
 
@@ -43,6 +50,7 @@ function console:textinput(t)
 	text = text..t
 end
 
+local MAX_LINES = 15
 function console:display()
 	lg.setColor(64, 64, 64, 200)
 	lg.rectangle("fill", 0, 0, windowW, windowH)
@@ -54,16 +62,11 @@ function console:display()
 		local txt = tbl[1]
 		local r, g, b = tbl[2], tbl[3], tbl[4]
 
-		if k > 15 then
+		if k > MAX_LINES then
 			table.remove(prints, 1)
 		end
 
-		if r then -- color check
-			lg.setColor(r, g, b)
-		else
-			lg.setColor(255, 255, 255)
-		end
-
+		lg.setColor(r or 255, g or 255, b or 255)
 		lg.printf("> "..txt, 20, k * 20, windowW)
 	end
 end
@@ -86,23 +89,17 @@ function console:input(key)
 		text = string.sub(text, 1, -2)
 	elseif key == "return"
 	and string.len(text) >= 1 then
-		for id, tbl in pairs(self.commands) do
-			local cmd = string.match(text, "^%w+") -- grab the first statement
-			local args = string.match(text, "%s.+") -- grab the rest
+		local cmd = string.match(text, "^%w+") -- grab the first statement
+		local args = string.match(text, "%s.+") -- grab the rest
 
+		for id, tbl in pairs(self.commands) do
 			if id == cmd then
 				local func = tbl[1]
-
-				if args then
-					text = "" -- reset the text field
-					return func(args)
-				else
-					text = ""
-					return func()
-				end
+				text = "" -- reset the text field
+				return func(args)
 			end
 		end
-		print(string.format("Invalid command: '%s'", text), 255, 102, 102)
+		printError(string.format("Invalid command: '%s'", text))
 		text = ""
 	end
 end
