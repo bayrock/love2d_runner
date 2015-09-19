@@ -24,7 +24,7 @@ local keyDown = love.keyboard.isDown
 function player.Update(dt)
 	player.score = player.score + dt
 	player.x = player.x + player.xVel * dt
-	
+
 	if keyDown("right") and player.xVel < player.speed then
 		player.xVel = player.xVel + player.speed * dt
 	elseif keyDown("left") and player.xVel > -player.speed then

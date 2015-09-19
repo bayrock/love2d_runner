@@ -72,7 +72,7 @@ function dead:save()
 		if love.filesystem.write("score.sav", "") then
 			print("Created sav file successfully!")
 		else
-			printError("Error creating sav file!")
+			console.error("Error creating sav file!")
 		end
 	else
 		print("Loaded highscore from file")
@@ -93,9 +93,11 @@ end
 function dead:enter()
 	lg.setBackgroundColor(0, 51, 51)
 	alpha = 255
+	frequency = 0
+	resetEnts()
 	gameloop:stop()
 	menuloop:play()
-	entKillAll()
+
 	if saved and player.score > player.highscore
 	and not debug then
 		newHighscore = true
@@ -103,7 +105,7 @@ function dead:enter()
 		if love.filesystem.write("score.sav", player.highscore) then
 			print("Saved highscore to file")
 		else
-			printError("Error writing highscore to file!")
+			console.error("Error writing highscore to file!")
 		end
 	end
 end

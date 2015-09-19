@@ -36,8 +36,8 @@ function game:enter()
 end
 
 function game:update(dt) -- update game
-	for k,v in pairs(entGetAll()) do v:Update(dt) end
-	entUpdate()
+	for k,v in pairs(GetAllEnts()) do v:Update(dt) end
+	entityHandler()
 	player.Update(dt)
 end
 
@@ -47,7 +47,7 @@ function game:debug()
 		lg.print(projectName, 5, 5)
 		lg.print("FPS: "..love.timer.getFPS(), 5, 20)
 		lg.print("Player X: "..math.floor(player.x), 5, 35)
-		lg.print("Entities: "..entCount(), 5, 50)
+		lg.print("Entities: "..GetEntCount(), 5, 50)
 		lg.print("Score: "..round(player.score, 1), 5, 65)
 		lg.setColor(0,0,0, 127)
 		lg.point(player.x, player.y)
@@ -59,7 +59,7 @@ function game:debug()
 end
 
 function game:draw() -- draw game
-	for k,v in pairs(entGetAll()) do v:Draw() end
+	for k,v in pairs(GetAllEnts()) do v:Draw() end
 	lg.setFont(font(24))
 	player.Draw()
 	drawBonus()

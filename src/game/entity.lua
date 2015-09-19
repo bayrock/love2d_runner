@@ -5,66 +5,72 @@ Author: Bayrock
 
 local ENTS = {}
 
-local entitymeta = {}
-entitymeta.__index = entitymeta
+local entity = {}
+entity.__index = entity
 
 math.random = love.math.random
 
-function entitymeta:Draw()
-	for k, v in pairs(ENTS) do
-		local pos = v.pos
-		local id = v.id
+function entity:Draw()
+	local pos = self.pos
+	local id = self.id
 
-		if id == "entity" then
-			lg.setColor(153,204,255)
-			lg.rectangle("fill", pos.x, pos.y, 40, 40)
-		elseif id == "powerup" then
-			lg.setColor(253,255,150)
-			lg.rectangle("fill", pos.x, pos.y, 25, 25)
-		end
+	if id == "entity" then
+		lg.setColor(153,204,255)
+		lg.rectangle("fill", pos.x, pos.y, 40, 40)
+	elseif id == "powerup" then
+		lg.setColor(253,255,150)
+		lg.rectangle("fill", pos.x, pos.y, 25, 25)
 	end
 end
 
-local function checkCollision(x1,y1,w1,h1, x2,y2,w2,h2)
-	return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
+function entity:Collided(w1,h1, x2,y2,w2,h2)
+	local pos = self.pos
+	return pos.x < x2+w2 and x2 < pos.x+w1 and pos.y < y2+h2 and y2 < pos.y+h1
+end
+
+function entity:Noclip()
+	if not self.noclip then
+		self.noclip = true
+  else
+    self.noclip = false
+  end
 end
 
 local frequency = 5
-local entSpeed = 35
-function entitymeta:Update(dt)
-	for k, v in pairs(ENTS) do
-		local pos = v.pos
-		local id = v.id
+local entSpeed = 200
+function entity:Update(dt)
+	local pos = self.pos
+	local id = self.id
 
-		if id == "entity" then
-			pos.y = pos.y + entSpeed * dt
-			if checkCollision(pos.x, pos.y, 40, 40, player.x, player.y - 35, 50, 50) then
-				gamestate.switch(dead)
-				frequency = 0
-			end
-		elseif id == "powerup" then
-			pos.y = pos.y + (entSpeed - 10) * dt
-			if checkCollision(pos.x, pos.y, 25, 25, player.x, player.y - 35, 50, 50) then
-				AddBonus(pos.x, pos.y, player.score + 5)
-				v:Kill() -- remove powerup
-				frequency = frequency - 1
-			end
+	if id == "entity" then
+		pos.y = pos.y + entSpeed * dt
+		if self:Collided(40, 40, player.x, player.y - 35, 50, 50)
+		and not self.noclip then
+			gamestate.switch(dead)
+			frequency = 0
 		end
+	elseif id == "powerup" then
+		pos.y = pos.y + (entSpeed - 10) * dt
+		if self:Collided(25, 25, player.x, player.y - 35, 50, 50)
+		and not self.noclip then
+			AddBonus(pos.x, pos.y, player.score + 5)
+			self:Kill() -- remove powerup
+			frequency = frequency - 1
+		end
+	end
 
-		if pos.y >= windowH + 10 then
-			pos.y = -10
-			pos.x = math.random(20, windowW - 20)
-		end
+	if pos.y >= windowH + 10 then
+		pos.y = -10
+		pos.x = math.random(20, windowW - 20)
 	end
 end
 
-function entitymeta:Kill()
-	for k,v in pairs(ENTS) do
-		if v == self then
-			table.remove(ENTS, k)
-			break
-		end
-	end
+function entity:Kill()
+	table.remove(ENTS, ENTS.self)
+end
+
+function resetEnts()
+	ENTS = {}
 end
 
 local bonus ={}
@@ -91,18 +97,12 @@ function drawBonus()
 	end
 end
 
-function entKillAll()
-	frequency = 0
-	ENTS = {}
-end
-
-function entNew(pos, id)
+function SpawnEnt(pos, id)
 	local new = {}
 	new.pos = pos
 	new.id = id
 
-	setmetatable(new, entitymeta)
-
+	setmetatable(new, entity)
 	table.insert(ENTS, new)
 
 	return new
@@ -115,7 +115,7 @@ end
 
 local incSum = 10
 local nextIncrement = incSum
-function entUpdate()
+function entityHandler()
 	if player.score > nextIncrement then
 		nextIncrement = nextIncrement + incSum
 		frequency = frequency + 1
@@ -125,9 +125,9 @@ function entUpdate()
 		local rand = math.random(1, 2)
 
 		if rand < 2 or nextIncrement == 10 then
-			entNew(randomVec(), "entity")
+			SpawnEnt(randomVec(), "entity")
 		elseif nextIncrement > 10 then -- not if we just started
-			entNew(randomVec(), "powerup")
+			SpawnEnt(randomVec(), "powerup")
 		end
 	elseif round(frequency) < #ENTS then
 		if not debug then
@@ -136,11 +136,11 @@ function entUpdate()
 	end
 end
 
-function entGetAll()
+function GetAllEnts()
 	return ENTS
 end
 
-function entCount()
+function GetEntCount()
 	return #ENTS
 end
 

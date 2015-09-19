@@ -8,15 +8,15 @@ function print(txt, r, g, b)
 	table.insert(prints, {txt, r, g, b})
 end
 
-function printSuccess(txt)
+console = {} -- console state constructor
+function console.success(txt)
 	table.insert(prints, {txt, 204, 255, 153})
 end
 
-function printError(txt)
+function console.error(txt)
 	table.insert(prints, {txt, 255, 102, 102})
 end
 
-console = {} -- console state constructor
 function console:init()
 	love.keyboard.setKeyRepeat(true)
 end
@@ -99,7 +99,7 @@ function console:input(key)
 				return func(args)
 			end
 		end
-		printError(string.format("Invalid command: '%s'", text))
+		self.error(string.format("Invalid command: '%s'", text))
 		text = ""
 	end
 end
